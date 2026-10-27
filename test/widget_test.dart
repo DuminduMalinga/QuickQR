@@ -6,12 +6,12 @@ import 'package:quickqr/screens/home_page.dart';
 import 'package:quickqr/screens/splash_page.dart';
 
 void main() {
-  testWidgets('renders the QuickQR splash identity', (
+  testWidgets('renders the QuickQr splash identity', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const QuickQrApp());
 
-    expect(find.text('QuickQR'), findsOneWidget);
+    expect(find.text('QuickQr'), findsOneWidget);
     expect(find.text('Create. Save. Share.'), findsOneWidget);
     expect(find.byType(SplashPage), findsOneWidget);
   });
@@ -36,7 +36,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(const QuickQrApp());
 
-    expect(find.text('QuickQR'), findsOneWidget);
+    expect(find.text('QuickQr'), findsOneWidget);
     expect(find.text('Create. Save. Share.'), findsOneWidget);
   });
 }

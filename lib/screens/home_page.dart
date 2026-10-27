@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../models/app_settings.dart';
 import '../models/qr_item.dart';
+import '../services/validators.dart';
 import '../widgets/qr_tile.dart';
+import '../widgets/responsive.dart';
 import 'history_page.dart';
 import 'result_page.dart';
 import 'settings_page.dart';
@@ -23,6 +25,13 @@ class _HomePageState extends State<HomePage> {
     TextInputType.phone,
   ];
 
+  static const _hints = [
+    'Any text',
+    'example.com or https://example.com',
+    'name@example.com',
+    '+94 77 123 4567',
+  ];
+
   final _controller = TextEditingController();
   int _type = 0;
   String? _error;
@@ -34,14 +43,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _generate() {
-    final text = _controller.text.trim();
-    if (text.isEmpty) {
-      setState(() => _error = 'Enter something to encode');
+    final input = validateQrInput(_types[_type], _controller.text);
+    if (!input.isValid) {
+      setState(() => _error = input.error);
       return;
     }
     setState(() => _error = null);
     final item = QrItem(
-      data: text,
+      data: input.data!,
       type: _types[_type],
       createdAt: DateTime.now(),
     );
@@ -64,7 +73,7 @@ class _HomePageState extends State<HomePage> {
             Icon(Icons.qr_code_2_rounded, color: scheme.primary, size: 30),
             const SizedBox(width: 8),
             const Text(
-              'QuickQR',
+              'QuickQr',
               style: TextStyle(fontWeight: FontWeight.w800),
             ),
           ],
@@ -82,8 +91,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
+      body: ResponsiveList(
         children: [
           Text(
             'Create QR codes in seconds.',
@@ -97,7 +105,10 @@ class _HomePageState extends State<HomePage> {
                 ChoiceChip(
                   label: Text(_types[i]),
                   selected: _type == i,
-                  onSelected: (_) => setState(() => _type = i),
+                  onSelected: (_) => setState(() {
+                    _type = i;
+                    _error = null;
+                  }),
                 ),
             ],
           ),
@@ -109,9 +120,13 @@ class _HomePageState extends State<HomePage> {
             keyboardType: _keyboards[_type],
             decoration: InputDecoration(
               labelText: '${_types[_type]} to encode',
+              hintText: _hints[_type],
               errorText: _error,
               border: const OutlineInputBorder(),
             ),
+            onChanged: (_) {
+              if (_error != null) setState(() => _error = null);
+            },
             onSubmitted: (_) => _generate(),
           ),
           const SizedBox(height: 16),

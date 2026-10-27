@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/qr_item.dart';
 import '../services/qr_export.dart';
 import '../widgets/qr_preview.dart';
+import '../widgets/responsive.dart';
 
 class SavePage extends StatefulWidget {
   const SavePage({super.key, required this.item});
@@ -47,10 +48,14 @@ class _SavePageState extends State<SavePage> {
     final saved = _savedAs != null;
     return Scaffold(
       appBar: AppBar(title: const Text('Save QR Code')),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
+      body: ResponsiveList(
         children: [
-          Center(child: QrPreview(data: widget.item.data, size: 200)),
+          Center(
+            child: QrPreview(
+              data: widget.item.data,
+              size: responsiveQrSize(context, 200),
+            ),
+          ),
           const SizedBox(height: 24),
           if (!saved) ...[
             TextField(

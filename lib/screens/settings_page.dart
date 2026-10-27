@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/app_settings.dart';
+import '../widgets/responsive.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -9,7 +10,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: ListView(
+      body: ResponsiveList(
+        vertical: 8,
+        minHorizontal: 0,
         children: [
           ValueListenableBuilder<ThemeMode>(
             valueListenable: themeMode,
@@ -34,10 +37,10 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.info_outline_rounded),
-            title: const Text('About QuickQR'),
+            title: const Text('About QuickQr'),
             onTap: () => showAboutDialog(
               context: context,
-              applicationName: 'QuickQR',
+              applicationName: 'QuickQr',
               applicationVersion: '1.0.0',
               children: const [Text('Create, save and share QR codes.')],
             ),
@@ -50,7 +53,7 @@ class SettingsPage extends StatelessWidget {
               builder: (context) => AlertDialog(
                 title: const Text('Privacy'),
                 content: const Text(
-                  'QuickQR works on your device. The text you encode is not '
+                  'QuickQr works on your device. The text you encode is not '
                   'uploaded or collected.',
                 ),
                 actions: [

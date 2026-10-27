@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme/app_colors.dart';
 import 'home_page.dart';
@@ -42,6 +43,18 @@ class _SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     if (_isComplete) return const HomePage();
 
+    // The splash is always dark, so keep status bar icons light here.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: _buildScaffold(),
+    );
+  }
+
+  Widget _buildScaffold() {
     return Scaffold(
       body: AnimatedBuilder(
         animation: _controller,
@@ -72,7 +85,7 @@ class _SplashPageState extends State<SplashPage>
                           opacity: _textOpacity(value),
                           duration: const Duration(milliseconds: 180),
                           child: const Text(
-                            'QuickQR',
+                            'QuickQr',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 34,

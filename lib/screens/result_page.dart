@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
 import '../widgets/qr_preview.dart';
+import '../widgets/responsive.dart';
 import 'save_page.dart';
 import 'share_page.dart';
 
@@ -14,10 +15,14 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Your QR Code')),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
+      body: ResponsiveList(
         children: [
-          Center(child: QrPreview(data: item.data, size: 240)),
+          Center(
+            child: QrPreview(
+              data: item.data,
+              size: responsiveQrSize(context, 240),
+            ),
+          ),
           const SizedBox(height: 28),
           FilledButton.icon(
             onPressed: () => Navigator.of(

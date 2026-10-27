@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/qr_item.dart';
 import '../services/qr_export.dart';
 import '../widgets/qr_preview.dart';
+import '../widgets/responsive.dart';
 
 class SharePage extends StatelessWidget {
   const SharePage({super.key, required this.item});
@@ -23,10 +24,14 @@ class SharePage extends StatelessWidget {
     final isUrl = item.type == 'URL';
     return Scaffold(
       appBar: AppBar(title: const Text('Share QR Code')),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
+      body: ResponsiveList(
         children: [
-          Center(child: QrPreview(data: item.data, size: 200)),
+          Center(
+            child: QrPreview(
+              data: item.data,
+              size: responsiveQrSize(context, 200),
+            ),
+          ),
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: () => _run(context, () => shareQrImage(item.data)),

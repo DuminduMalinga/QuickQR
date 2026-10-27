@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'models/app_settings.dart';
 import 'screens/splash_page.dart';
@@ -50,11 +51,29 @@ class QuickQrApp extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeMode,
       builder: (context, mode, _) => MaterialApp(
-        title: 'QuickQR',
+        title: 'QuickQr',
         debugShowCheckedModeBanner: false,
         theme: _theme(_lightScheme),
         darkTheme: _theme(_darkScheme),
         themeMode: mode,
+        builder: (context, child) {
+          // Match status bar icons to the app theme, not the system theme.
+          final dark = Theme.of(context).brightness == Brightness.dark;
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+              statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+              systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+              systemNavigationBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+            ),
+            child: child!,
+          );
+        },
         home: const SplashPage(),
       ),
     );

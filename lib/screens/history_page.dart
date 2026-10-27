@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
 import '../widgets/qr_tile.dart';
+import '../widgets/responsive.dart';
 import 'result_page.dart';
 import 'share_page.dart';
 
@@ -56,6 +57,7 @@ class HistoryPage extends StatelessWidget {
             );
           }
           return ListView.separated(
+            padding: responsivePadding(context, vertical: 8),
             itemCount: items.length,
             separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, i) {
