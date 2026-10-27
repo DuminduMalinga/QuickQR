@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                   label: Text(_types[i]),
                   selected: _type == i,
                   onSelected: (_) => setState(() {
+                    if (_type != i) _controller.clear();
                     _type = i;
                     _error = null;
                   }),
