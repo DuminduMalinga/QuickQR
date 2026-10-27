@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/app_settings.dart';
 import '../models/qr_item.dart';
-import '../theme/app_colors.dart';
-import '../widgets/qr_preview.dart';
+import '../widgets/qr_tile.dart';
 import 'history_page.dart';
 import 'result_page.dart';
 import 'settings_page.dart';
@@ -60,11 +59,14 @@ class _HomePageState extends State<HomePage> {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.qr_code_2_rounded, color: kIndigo, size: 30),
-            SizedBox(width: 8),
-            Text('QuickQR', style: TextStyle(fontWeight: FontWeight.w800)),
+            Icon(Icons.qr_code_2_rounded, color: scheme.primary, size: 30),
+            const SizedBox(width: 8),
+            const Text(
+              'QuickQR',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
           ],
         ),
         actions: [
@@ -151,15 +153,9 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 children: [
                   for (final item in items.take(3))
-                    ListTile(
+                    QrTile(
+                      item: item,
                       contentPadding: EdgeInsets.zero,
-                      leading: QrPreview(data: item.data, size: 48),
-                      title: Text(
-                        item.data,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text(item.type),
                       onTap: () => _push(ResultPage(item: item)),
                     ),
                 ],

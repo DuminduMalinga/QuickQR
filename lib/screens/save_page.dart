@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
 import '../services/qr_export.dart';
-import '../theme/app_colors.dart';
 import '../widgets/qr_preview.dart';
 
 class SavePage extends StatefulWidget {
@@ -72,7 +71,11 @@ class _SavePageState extends State<SavePage> {
               ),
             ),
           ] else ...[
-            const Icon(Icons.check_circle_rounded, color: kIndigo, size: 56),
+            Icon(
+              Icons.check_circle_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 56,
+            ),
             const SizedBox(height: 12),
             const Text(
               'Saved to Gallery',

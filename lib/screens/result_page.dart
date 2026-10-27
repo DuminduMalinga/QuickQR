@@ -12,25 +12,12 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(title: const Text('Your QR Code')),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           Center(child: QrPreview(data: item.data, size: 240)),
-          const SizedBox(height: 20),
-          Text(
-            item.type,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: scheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: 4),
-          SelectableText(
-            item.data,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
           const SizedBox(height: 28),
           FilledButton.icon(
             onPressed: () => Navigator.of(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
-import '../widgets/qr_preview.dart';
+import '../widgets/qr_tile.dart';
 import 'result_page.dart';
 import 'share_page.dart';
 
@@ -60,14 +60,8 @@ class HistoryPage extends StatelessWidget {
             separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, i) {
               final item = items[i];
-              return ListTile(
-                leading: QrPreview(data: item.data, size: 48),
-                title: Text(
-                  item.data,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Text(item.type),
+              return QrTile(
+                item: item,
                 onTap: () => _push(context, ResultPage(item: item)),
                 trailing: PopupMenuButton<String>(
                   onSelected: (action) {
