@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../models/qr_item.dart';
 import '../services/qr_export.dart';
@@ -10,10 +11,18 @@ class SharePage extends StatelessWidget {
 
   final QrItem item;
 
-  Future<void> _run(BuildContext context, Future<void> Function() share) async {
+  Future<void> _run(
+    BuildContext context,
+    Future<ShareResult> Function() share,
+  ) async {
     final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     try {
-      await share();
+      final result = await share();
+      // Cancelling the share sheet keeps the user on this screen.
+      if (result.status == ShareResultStatus.success) {
+        navigator.popUntil((route) => route.isFirst);
+      }
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text('Could not share: $e')));
     }

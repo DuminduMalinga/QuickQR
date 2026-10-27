@@ -35,7 +35,12 @@ class _SavePageState extends State<SavePage> {
     setState(() => _saving = true);
     try {
       await saveQrToGallery(widget.item.data, name);
-      if (mounted) setState(() => _savedAs = '$name.png');
+      messenger.showSnackBar(
+        SnackBar(content: Text('Saved $name.png to Gallery')),
+      );
+      if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
     } finally {

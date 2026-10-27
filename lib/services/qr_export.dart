@@ -39,15 +39,15 @@ Future<void> saveQrToGallery(String data, String name) async {
   await Gal.putImageBytes(bytes, name: name);
 }
 
-Future<void> shareQrImage(String data) async {
+Future<ShareResult> shareQrImage(String data) async {
   final bytes = await renderQrPng(data);
   final dir = await getTemporaryDirectory();
   final file = File('${dir.path}/quickqr_share.png');
   await file.writeAsBytes(bytes);
-  await SharePlus.instance.share(
+  return SharePlus.instance.share(
     ShareParams(files: [XFile(file.path, mimeType: 'image/png')]),
   );
 }
 
-Future<void> shareQrText(String data) =>
+Future<ShareResult> shareQrText(String data) =>
     SharePlus.instance.share(ShareParams(text: data));
