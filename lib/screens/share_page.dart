@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
+import '../services/qr_export.dart';
 import '../widgets/qr_preview.dart';
 
 class SharePage extends StatelessWidget {
@@ -8,11 +9,13 @@ class SharePage extends StatelessWidget {
 
   final QrItem item;
 
-  void _share(BuildContext context, String what) {
-    // TODO: hook up the native share sheet (share_plus).
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Sharing $what...')));
+  Future<void> _run(BuildContext context, Future<void> Function() share) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await share();
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text('Could not share: $e')));
+    }
   }
 
   @override
@@ -26,7 +29,7 @@ class SharePage extends StatelessWidget {
           Center(child: QrPreview(data: item.data, size: 200)),
           const SizedBox(height: 24),
           FilledButton.icon(
-            onPressed: () => _share(context, 'QR image'),
+            onPressed: () => _run(context, () => shareQrImage(item.data)),
             icon: const Icon(Icons.image_outlined),
             label: const Text('Share QR Image'),
             style: FilledButton.styleFrom(
@@ -35,7 +38,7 @@ class SharePage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
-            onPressed: () => _share(context, isUrl ? 'URL' : 'text'),
+            onPressed: () => _run(context, () => shareQrText(item.data)),
             icon: const Icon(Icons.link_rounded),
             label: Text(isUrl ? 'Share URL' : 'Share Text'),
             style: OutlinedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/qr_item.dart';
+import '../services/qr_export.dart';
 import '../theme/app_colors.dart';
 import '../widgets/qr_preview.dart';
 
@@ -23,13 +24,23 @@ class _SavePageState extends State<SavePage> {
     super.dispose();
   }
 
-  void _save() {
-    final name = _name.text.trim();
-    setState(() {
-      _savedAs = name.isEmpty
-          ? 'qr_${DateTime.now().millisecondsSinceEpoch}.png'
-          : '$name.png';
-    });
+  bool _saving = false;
+
+  Future<void> _save() async {
+    final typed = _name.text.trim().replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
+    final name = typed.isEmpty
+        ? 'qr_${DateTime.now().millisecondsSinceEpoch}'
+        : typed;
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _saving = true);
+    try {
+      await saveQrToGallery(widget.item.data, name);
+      if (mounted) setState(() => _savedAs = '$name.png');
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
   }
 
   @override
@@ -53,7 +64,7 @@ class _SavePageState extends State<SavePage> {
             ),
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: _save,
+              onPressed: _saving ? null : _save,
               icon: const Icon(Icons.photo_library_outlined),
               label: const Text('Save to Gallery'),
               style: FilledButton.styleFrom(

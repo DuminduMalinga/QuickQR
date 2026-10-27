@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'models/app_settings.dart';
 import 'screens/splash_page.dart';
+import 'services/storage.dart';
 import 'theme/app_colors.dart';
 
-void main() => runApp(const QuickQrApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initStorage();
+  runApp(const QuickQrApp());
+}
 
 class QuickQrApp extends StatelessWidget {
   const QuickQrApp({super.key});
